@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glm/glm.hpp>
+#include <embree3/rtcore.h>
 
 int main()
 {
