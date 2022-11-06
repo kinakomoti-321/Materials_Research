@@ -4,7 +4,7 @@
 #include <stb_image.h>
 #include <string>
 
-namespace MR_Image
+namespace MR
 {
     inline void imageLoderPNG(const std::string &filepath, Image &image)
     {

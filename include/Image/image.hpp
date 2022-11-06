@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
-namespace MR_Image
+namespace MR
 {
     class Image
     {

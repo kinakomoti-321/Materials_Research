@@ -7,7 +7,7 @@
 #include <cmath>
 #include <algorithm>
 
-namespace MR_Image
+namespace MR
 {
     class Texture
     {
