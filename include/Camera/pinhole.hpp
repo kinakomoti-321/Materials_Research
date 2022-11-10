@@ -28,7 +28,7 @@ namespace MR
         {
             MR::Ray ray;
             ray.origin = c_origin;
-            ray.direction = normalize(c_direction * f - c_side * v + c_up * u);
+            ray.direction = normalize(c_direction - c_side * v + c_up * u);
             c_weight = 1.0;
 
             return ray;

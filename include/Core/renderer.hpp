@@ -63,6 +63,8 @@ namespace MR
                         float cam_weight;
                         Ray cam_ray = _render_info.camera->getCameraRay(u, v, cam_weight);
                         s_color += _render_info.integrator->integrate(cam_ray, _render_info.scene, sampler);
+                        // std::cout << cam_ray.direction << std::endl;
+                        // s_color += cam_ray.direction;
                     }
 
                     image.setPixel(i, j, s_color / static_cast<float>(_render_info.sample));

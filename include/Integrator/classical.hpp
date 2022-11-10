@@ -16,13 +16,13 @@ namespace MR
         vec3 integrate(const MR::Ray &camera_ray, const MR::Scene &scene, std::shared_ptr<MR::Sampler> sampler) const override
         {
             Ray ray = camera_ray;
-            unsigned int MAX_DEPTH;
+            unsigned int MAX_DEPTH = 10;
             vec3 LTE = vec3(0);
-
+            // std::cout << "raytrace" << std::endl;
             for (int i = 0; i < MAX_DEPTH; i++)
             {
                 IntersectionInfo info;
-                if (scene.intersect(ray, info))
+                if (!scene.intersect(ray, info))
                 {
                     LTE = scene.getSkyLTE(ray.direction);
                     break;
@@ -31,6 +31,7 @@ namespace MR
                 auto &bsdf = info.bsdf;
                 auto &material_info = info.mat_info;
                 LTE = material_info.basecolor * std::max(dot(info.normal, normalize(vec3(1, 1, 1))), 0.0f);
+
                 break;
             }
 

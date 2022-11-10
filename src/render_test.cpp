@@ -30,7 +30,7 @@ int main()
     render_info.integrator = std::make_shared<MR::ClassicalRaytrace>();
     render_info.sampler = std::make_shared<MR::RNGrandom>();
     render_info.scene = scene;
-    render_info.sample = 1;
+    render_info.sample = 10;
 
     renderer.setRenderInfomation(render_info);
     renderer.render();

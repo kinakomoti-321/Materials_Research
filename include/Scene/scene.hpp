@@ -43,7 +43,6 @@ namespace MR
             for (int i = 0; i < _sphere.size(); i++)
             {
                 IntersectionInfo ninfo;
-                std::cout << "intersection" << std::endl;
                 if (_sphere[i].intersect(ray, ninfo))
                 {
                     if (mininfo.distance > ninfo.distance)
@@ -53,7 +52,7 @@ namespace MR
                     }
                 }
             }
-
+            info = mininfo;
             MaterialInfo mat_info;
             mat_info.basecolor = vec3(1);
 
