@@ -12,7 +12,11 @@ namespace MR
         float tmin = 1e-3;
         float tmax = 1e5;
 
-        Ray();
+        Ray()
+        {
+            origin = vec3(0);
+            direction = vec3(0);
+        }
         Ray(const vec3 origin, const vec3 direction) : origin(origin), direction(direction) {}
 
         vec3 operator()(float t) const

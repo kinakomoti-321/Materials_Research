@@ -4,6 +4,7 @@
 #include <Core/ray.hpp>
 #include <Image/image.hpp>
 #include <spdlog/spdlog.h>
+#include <Core/logger.hpp>
 #include <vector>
 #include <Scene/sphere.hpp>
 #include <Material/material.hpp>
@@ -30,9 +31,11 @@ namespace MR
 
         void sceneBuild()
         {
+            startLog("Scene Build");
+            endLog("Scene Build");
         }
 
-        bool intersect(const Ray &ray, IntersectionInfo &info)
+        bool intersect(const Ray &ray, IntersectionInfo &info) const
         {
             IntersectionInfo mininfo;
             mininfo.distance = ray.tmax;
@@ -40,6 +43,7 @@ namespace MR
             for (int i = 0; i < _sphere.size(); i++)
             {
                 IntersectionInfo ninfo;
+                std::cout << "intersection" << std::endl;
                 if (_sphere[i].intersect(ray, ninfo))
                 {
                     if (mininfo.distance > ninfo.distance)
@@ -50,7 +54,16 @@ namespace MR
                 }
             }
 
+            MaterialInfo mat_info;
+            mat_info.basecolor = vec3(1);
+
+            info.mat_info = mat_info;
             return intersection;
+        }
+
+        vec3 getSkyLTE(const vec3 &direction) const
+        {
+            return vec3(0);
         }
     };
 }

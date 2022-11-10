@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(main LANGUAGES C CXX)
 
 find_package(embree 3.0 REQUIRED)
-add_executable(MR "src/texture.cpp")
+add_executable(MR "src/render_test.cpp")
 
 add_subdirectory(external)
 

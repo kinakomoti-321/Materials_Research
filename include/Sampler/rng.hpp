@@ -52,6 +52,10 @@ namespace MR
             const float divider = 1.0f / std::numeric_limits<uint32_t>::max();
             return pcg32_random_r(&seed) * divider;
         }
+        std::string getSamplerName() const override
+        {
+            return "RNG 32";
+        }
         std::shared_ptr<Sampler> clone() const override
         {
             return std::make_shared<RNGrandom>();

@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 
 using namespace glm;
-namespace MR
+namespace MR_BSDF
 {
     class BSDF
     {

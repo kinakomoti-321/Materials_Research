@@ -38,14 +38,12 @@ namespace MR_Math
                     v[0] * lx[2] + v[1] * ly[2] + v[2] * lz[2]);
     }
 
-    inline vec3 localToWorld(const vec3 &v, const vec3 &lx, const vec3 &ly,
-                             const vec3 &lz)
+    inline vec3 worldtoLocal(const vec3 &v, const vec3 &lx, const vec3 &ly, const vec3 &lz)
     {
-        return vec3(v[0] * lx[0] + v[1] * ly[0] + v[2] * lz[0],
-                    v[0] * lx[1] + v[1] * ly[1] + v[2] * lz[1],
-                    v[0] * lx[2] + v[1] * ly[2] + v[2] * lz[2]);
+        return vec3(v[0] * lx[0] + v[1] * lx[1] + v[2] * lx[2],
+                    v[0] * ly[0] + v[1] * ly[1] + v[2] * ly[2],
+                    v[0] * lz[0] + v[1] * lz[1] + v[2] * lz[2]);
     }
-
     inline float norm(const vec3 &v)
     {
         return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
