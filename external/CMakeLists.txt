@@ -8,3 +8,6 @@ target_include_directories(spdlog SYSTEM INTERFACE "./spdlog/include")
 
 add_library(stb INTERFACE)
 target_include_directories(stb SYSTEM INTERFACE stb)
+
+add_library(tinyobj INTERFACE)
+target_include_directories(tinyobj SYSTEM INTERFACE "./tinyobjloader")

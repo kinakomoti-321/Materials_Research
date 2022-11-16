@@ -12,6 +12,11 @@ namespace MR
         vec3 normal;
         vec3 position;
         float distance;
+        vec2 texcoord;
+
+        unsigned int geometryID;
+        unsigned int instanceID;
+
         std::shared_ptr<MR_BSDF::BSDF> bsdf;
         MaterialInfo mat_info;
     };

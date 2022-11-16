@@ -19,21 +19,17 @@ namespace MR
             unsigned int MAX_DEPTH = 10;
             vec3 LTE = vec3(0);
             // std::cout << "raytrace" << std::endl;
-            for (int i = 0; i < MAX_DEPTH; i++)
+            IntersectionInfo info;
+            std::cout << "intersect" << std::endl;
+            if (!scene.intersect(ray, info))
             {
-                IntersectionInfo info;
-                if (!scene.intersect(ray, info))
-                {
-                    LTE = scene.getSkyLTE(ray.direction);
-                    break;
-                }
-
-                auto &bsdf = info.bsdf;
-                auto &material_info = info.mat_info;
-                LTE = material_info.basecolor * std::max(dot(info.normal, normalize(vec3(1, 1, 1))), 0.0f);
-
-                break;
+                std::cout << "doko" << std::endl;
+                LTE = scene.getSkyLTE(ray.direction);
+                return LTE;
             }
+            auto &bsdf = info.bsdf;
+            auto &material_info = info.mat_info;
+            LTE = vec3(1.0);
 
             return LTE;
         };

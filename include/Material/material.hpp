@@ -78,6 +78,10 @@ namespace MR
         {
             return "Lambert";
         };
+        virtual void writeTextures() const override
+        {
+            std::cout << "test" << std::endl;
+        };
     };
     /*
         class Specular_Phong : public Material
