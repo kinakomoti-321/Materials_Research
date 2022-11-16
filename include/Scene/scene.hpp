@@ -71,6 +71,7 @@ namespace MR
             for (int i = 0; i < _modelinfo.vertices.size(); i++)
             {
                 vb[i] = _modelinfo.vertices[i];
+                std::cout << vb[i] << std::endl;
             }
 
             unsigned int npoly = _modelinfo.vert_indices.size() / 3;
@@ -79,6 +80,7 @@ namespace MR
             for (int i = 0; i < _modelinfo.vert_indices.size(); i++)
             {
                 ib[i] = _modelinfo.vert_indices[i];
+                std::cout << ib[i] << std::endl;
             }
         }
 

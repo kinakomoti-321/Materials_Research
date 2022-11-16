@@ -1,39 +1,61 @@
-#include <Core/renderer.hpp>
-#include <Camera/camera.hpp>
-#include <Integrator/integrator.hpp>
-#include <Integrator/classical.hpp>
-#include <Camera/pinhole.hpp>
-#include <Scene/scene.hpp>
-#include <Sampler/sampler.hpp>
-#include <Sampler/rng.hpp>
-#include <glm/glm.hpp>
-#include <memory>
+#include <embree3/rtcore.h>
+#include <limits>
+#include <iostream>
 
 int main()
 {
+    RTCDevice device = rtcNewDevice(NULL);
+    RTCScene scene = rtcNewScene(device);
+    RTCGeometry geom = rtcNewGeometry(device, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-    vec3 cp = vec3(0, 0, -1);
-    vec3 atlook = normalize(vec3(0) - cp);
-    std::shared_ptr<MR::Camera> camera = std::make_shared<MR::Pinhole>(cp, atlook, 45);
+    float *vb = (float *)rtcSetNewGeometryBuffer(geom,
+                                                 RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+    vb[0] = 0.f;
+    vb[1] = 0.f;
+    vb[2] = 0.f; // 1st vertex
+    vb[3] = 1.f;
+    vb[4] = 0.f;
+    vb[5] = 0.f; // 2nd vertex
+    vb[6] = 0.f;
+    vb[7] = 1.f;
+    vb[8] = 0.f; // 3rd vertex
 
-    MR::Scene scene;
-    scene.testScene();
-    scene.sceneBuild();
+    unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
+                                                       RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+    ib[0] = 0;
+    ib[1] = 1;
+    ib[2] = 2;
 
-    MR::Renderer renderer;
-    MR::RenderInformation render_info;
-    render_info.width = 512;
-    render_info.height = 512;
-    render_info.filename = "Render_test.png";
+    rtcCommitGeometry(geom);
+    rtcAttachGeometry(scene, geom);
+    rtcReleaseGeometry(geom);
+    rtcCommitScene(scene);
 
-    render_info.camera = camera;
-    render_info.integrator = std::make_shared<MR::ClassicalRaytrace>();
-    render_info.sampler = std::make_shared<MR::RNGrandom>();
-    render_info.scene = scene;
-    render_info.sample = 10;
+    RTCRayHit rayhit;
+    rayhit.ray.org_x = 0.f;
+    rayhit.ray.org_y = 0.f;
+    rayhit.ray.org_z = -1.f;
+    rayhit.ray.dir_x = 0.f;
+    rayhit.ray.dir_y = 0.f;
+    rayhit.ray.dir_z = 1.f;
+    rayhit.ray.tnear = 0.f;
+    rayhit.ray.tfar = std::numeric_limits<float>::infinity();
+    rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
 
-    renderer.setRenderInfomation(render_info);
-    renderer.render();
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
 
-    return 0;
+    rtcIntersect1(scene, &context, &rayhit);
+
+    if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
+    {
+        std::cout << "Intersection at t = " << rayhit.ray.tfar << std::endl;
+    }
+    else
+    {
+        std::cout << "No Intersection" << std::endl;
+    }
+
+    rtcReleaseScene(scene);
+    rtcReleaseDevice(device);
 }
