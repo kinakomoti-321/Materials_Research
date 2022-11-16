@@ -29,7 +29,7 @@ namespace MR
 
     public:
         Renderer() {}
-        void setRenderInfomation(const RenderInformation renderinfo)
+        void setRenderInfomation(const RenderInformation &renderinfo)
         {
             _render_info = renderinfo;
         }

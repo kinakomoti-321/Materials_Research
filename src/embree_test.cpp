@@ -34,7 +34,7 @@ int main()
     RTCRayHit rayhit;
     rayhit.ray.org_x = 0.f;
     rayhit.ray.org_y = 0.f;
-    rayhit.ray.org_z = -1.f;
+    rayhit.ray.org_z = 1.f;
     rayhit.ray.dir_x = 0.f;
     rayhit.ray.dir_y = 0.f;
     rayhit.ray.dir_z = 1.f;

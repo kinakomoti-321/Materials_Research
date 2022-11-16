@@ -65,6 +65,7 @@ namespace MR
 
         void geomAttach()
         {
+            /*
             unsigned int nvert = _modelinfo.vertices.size() / 3;
             float *vb = (float *)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), nvert);
 
@@ -82,6 +83,27 @@ namespace MR
                 ib[i] = _modelinfo.vert_indices[i];
                 std::cout << ib[i] << std::endl;
             }
+            */
+            float *vb = (float *)rtcSetNewGeometryBuffer(geom,
+                                                         RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+            vb[0] = 0.f;
+            vb[1] = 0.f;
+            vb[2] = 0.f; // 1st vertex
+            vb[3] = 1.f;
+            vb[4] = 0.f;
+            vb[5] = 0.f; // 2nd vertex
+            vb[6] = 0.f;
+            vb[7] = 1.f;
+            vb[8] = 0.f; // 3rd vertex
+
+            unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
+                                                               RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+            ib[0] = 0;
+            ib[1] = 1;
+            ib[2] = 2;
+
+            rtcCommitGeometry(geom);
+            std::cout << "Create Geometry success" << std::endl;
         }
 
     public:
@@ -139,18 +161,63 @@ namespace MR
         {
             startLog("Scene Build");
 
-            geomAttach();
+            // geomAttach();
 
-            rtcCommitGeometry(geom);
-            std::cout << "Create Geometry success" << std::endl;
-
-            rtcAttachGeometry(scene, geom);
+            // rtcAttachGeometry(scene, geom);
             std::cout << "Attach Geometry success" << std::endl;
 
+            // rtcReleaseGeometry(geom);
+            // rtcCommitScene(scene);
+            float *vb = (float *)rtcSetNewGeometryBuffer(geom,
+                                                         RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+            vb[0] = 0.f;
+            vb[1] = 0.f;
+            vb[2] = 0.f; // 1st vertex
+            vb[3] = 1.f;
+            vb[4] = 0.f;
+            vb[5] = 0.f; // 2nd vertex
+            vb[6] = 0.f;
+            vb[7] = 1.f;
+            vb[8] = 0.f; // 3rd vertex
+
+            unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
+                                                               RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+            ib[0] = 0;
+            ib[1] = 1;
+            ib[2] = 2;
+
+            rtcCommitGeometry(geom);
+            rtcAttachGeometry(scene, geom);
             rtcReleaseGeometry(geom);
             rtcCommitScene(scene);
 
             std::cout << "Scene Commit success" << std::endl;
+
+            RTCIntersectContext context;
+            rtcInitIntersectContext(&context);
+
+            RTCRayHit rayhit;
+            rayhit.ray.org_x = 0.f;
+            rayhit.ray.org_y = 0.f;
+            rayhit.ray.org_z = -1.f;
+            rayhit.ray.dir_x = 0.f;
+            rayhit.ray.dir_y = 0.f;
+            rayhit.ray.dir_z = 1.f;
+            rayhit.ray.tnear = 0.f;
+            rayhit.ray.tfar = std::numeric_limits<float>::infinity();
+            rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+            std::cout << "intersect_" << std::endl;
+            rtcIntersect1(scene, &context, &rayhit);
+
+            if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
+            {
+                std::cout << "hit" << std::endl;
+            }
+            else
+            {
+                std::cout << "not hit" << std::endl;
+            }
 
             endLog("Scene Build");
         }
@@ -236,27 +303,13 @@ namespace MR
             RTCIntersectContext context;
             rtcInitIntersectContext(&context);
 
-            // std::cout << "intersect_" << std::endl;
             rtcIntersect1(scene, &context, &rtc_ray);
 
             if (rtc_ray.hit.geomID != RTC_INVALID_GEOMETRY_ID)
             {
-                std::cout << "hit" << std::endl;
-                info.distance = rtc_ray.ray.tfar;
-                info.position = ray(info.distance);
-                info.geometryID = rtc_ray.hit.primID;
-                vec2 barycoord = vec2(rtc_ray.hit.u, rtc_ray.hit.v);
-                info.normal = getPolyNormal(info.geometryID, barycoord);
-                info.texcoord = getPolyTexcoord(info.geometryID, barycoord);
-
-                unsigned int mat_index = _modelinfo.mat_indices[info.geometryID];
-                auto &material = _modelinfo.materials[mat_index];
-                info.bsdf = material->getMaterial(info.texcoord);
-                info.mat_info = material->getMaterialInfomation();
 
                 return true;
             }
-            // std::cout << "koko?" << std::endl;
 
             return false;
         }
