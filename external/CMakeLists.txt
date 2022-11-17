@@ -11,3 +11,6 @@ target_include_directories(stb SYSTEM INTERFACE stb)
 
 add_library(tinyobj INTERFACE)
 target_include_directories(tinyobj SYSTEM INTERFACE "./tinyobjloader")
+
+add_library(json INTERFACE)
+target_include_directories(json SYSTEM INTERFACE "./json/include")

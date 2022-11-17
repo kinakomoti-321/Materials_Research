@@ -13,41 +13,45 @@
 
 namespace MR
 {
-    float plane_vert[9] = {
-        1, -1, 0,
+    struct ModelInfo
+    {
+        std::vector<float> vertices;
+        std::vector<unsigned int> vert_indices;
+        std::vector<float> normals;
+        std::vector<float> texcoord;
+
+        std::vector<unsigned int> mat_indices;
+        std::vector<std::shared_ptr<Material>> materials;
+
+        std::vector<unsigned int> light_indices;
+    };
+
+    float plane_vert[12] = {
         1, 1, 0,
+        1, -1, 0,
+        -1, -1, 0,
         -1, 1, 0};
-    unsigned int plane_ind[3] = {
-        0, 1, 2};
+    unsigned int plane_ind[6] = {
+        0, 1, 2,
+        0, 2, 3};
 
-    float plane_norm[9] = {
-        1, 0, 0,
-        1, 0, 0,
-        1, 0, 0};
+    float plane_norm[12] = {
+        0, 0, 1,
+        0, 0, 1,
+        0, 0, 1,
+        0, 0, 1};
 
-    float plane_tex[6] = {
-        0, 0,
+    float plane_tex[8] = {
+        1, 1,
         1, 0,
-        1, 1};
+        0, 0,
+        0, 1};
 
     class Scene
     {
     private:
         // Geometry
         std::vector<Sphere> _sphere;
-
-        struct ModelInfo
-        {
-            std::vector<float> vertices;
-            std::vector<unsigned int> vert_indices;
-            std::vector<float> normals;
-            std::vector<float> texcoord;
-
-            std::vector<unsigned int> mat_indices;
-            std::vector<std::shared_ptr<Material>> materials;
-
-            std::vector<unsigned int> light_indices;
-        };
 
         ModelInfo _modelinfo;
 
@@ -65,42 +69,40 @@ namespace MR
 
         void geomAttach()
         {
-            /*
             unsigned int nvert = _modelinfo.vertices.size() / 3;
             float *vb = (float *)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), nvert);
 
             for (int i = 0; i < _modelinfo.vertices.size(); i++)
             {
                 vb[i] = _modelinfo.vertices[i];
-                std::cout << vb[i] << std::endl;
             }
 
             unsigned int npoly = _modelinfo.vert_indices.size() / 3;
-            unsigned int *ib = (unsigned int *)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned int), npoly);
+            unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), npoly);
 
             for (int i = 0; i < _modelinfo.vert_indices.size(); i++)
             {
                 ib[i] = _modelinfo.vert_indices[i];
-                std::cout << ib[i] << std::endl;
             }
-            */
-            float *vb = (float *)rtcSetNewGeometryBuffer(geom,
-                                                         RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
-            vb[0] = 0.f;
-            vb[1] = 0.f;
-            vb[2] = 0.f; // 1st vertex
-            vb[3] = 1.f;
-            vb[4] = 0.f;
-            vb[5] = 0.f; // 2nd vertex
-            vb[6] = 0.f;
-            vb[7] = 1.f;
-            vb[8] = 0.f; // 3rd vertex
+            /*
+             float *vb = (float *)rtcSetNewGeometryBuffer(geom,
+                                                          RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
+             vb[0] = 0.f;
+             vb[1] = 0.f;
+             vb[2] = 0.f; // 1st vertex
+             vb[3] = 1.f;
+             vb[4] = 0.f;
+             vb[5] = 0.f; // 2nd vertex
+             vb[6] = 0.f;
+             vb[7] = 1.f;
+             vb[8] = 0.f; // 3rd vertex
 
-            unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
-                                                               RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
-            ib[0] = 0;
-            ib[1] = 1;
-            ib[2] = 2;
+             unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
+                                                                RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
+             ib[0] = 0;
+             ib[1] = 1;
+             ib[2] = 2;
+             */
 
             rtcCommitGeometry(geom);
             std::cout << "Create Geometry success" << std::endl;
@@ -125,20 +127,20 @@ namespace MR
 
         void testScene()
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 12; i++)
             {
                 _modelinfo.vertices.push_back(plane_vert[i]);
                 _modelinfo.normals.push_back(plane_norm[i]);
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 6; i++)
             {
                 _modelinfo.vert_indices.push_back(plane_ind[i]);
             }
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 8; i++)
             {
                 _modelinfo.texcoord.push_back(plane_tex[i]);
             }
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 _modelinfo.mat_indices.push_back(0);
             }
@@ -161,13 +163,14 @@ namespace MR
         {
             startLog("Scene Build");
 
-            // geomAttach();
+            geomAttach();
 
-            // rtcAttachGeometry(scene, geom);
+            rtcAttachGeometry(scene, geom);
             std::cout << "Attach Geometry success" << std::endl;
 
-            // rtcReleaseGeometry(geom);
-            // rtcCommitScene(scene);
+            rtcReleaseGeometry(geom);
+            rtcCommitScene(scene);
+            /*
             float *vb = (float *)rtcSetNewGeometryBuffer(geom,
                                                          RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
             vb[0] = 0.f;
@@ -190,34 +193,7 @@ namespace MR
             rtcAttachGeometry(scene, geom);
             rtcReleaseGeometry(geom);
             rtcCommitScene(scene);
-
-            std::cout << "Scene Commit success" << std::endl;
-
-            RTCIntersectContext context;
-            rtcInitIntersectContext(&context);
-
-            RTCRayHit rayhit;
-            rayhit.ray.org_x = 0.f;
-            rayhit.ray.org_y = 0.f;
-            rayhit.ray.org_z = -1.f;
-            rayhit.ray.dir_x = 0.f;
-            rayhit.ray.dir_y = 0.f;
-            rayhit.ray.dir_z = 1.f;
-            rayhit.ray.tnear = 0.f;
-            rayhit.ray.tfar = std::numeric_limits<float>::infinity();
-            rayhit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-
-            std::cout << "intersect_" << std::endl;
-            rtcIntersect1(scene, &context, &rayhit);
-
-            if (rayhit.hit.geomID != RTC_INVALID_GEOMETRY_ID)
-            {
-                std::cout << "hit" << std::endl;
-            }
-            else
-            {
-                std::cout << "not hit" << std::endl;
-            }
+            */
 
             endLog("Scene Build");
         }
@@ -299,6 +275,7 @@ namespace MR
             info.mat_info = mat_info;
             return intersection;
             */
+
             RTCRayHit rtc_ray = rayConvertRTCRayHit(ray);
             RTCIntersectContext context;
             rtcInitIntersectContext(&context);
@@ -307,6 +284,19 @@ namespace MR
 
             if (rtc_ray.hit.geomID != RTC_INVALID_GEOMETRY_ID)
             {
+                info.distance = rtc_ray.ray.tfar;
+                info.position = ray(info.distance);
+                info.geometryID = rtc_ray.hit.primID;
+                vec2 bary = vec2(rtc_ray.hit.u, rtc_ray.hit.v);
+
+                info.normal = getPolyNormal(info.geometryID, bary);
+                info.texcoord = getPolyTexcoord(info.geometryID, bary);
+
+                auto mat_idx = _modelinfo.mat_indices[info.geometryID];
+                auto &mat = _modelinfo.materials[mat_idx];
+
+                info.bsdf = mat->getMaterial(bary);
+                info.mat_info = mat->getMaterialInfomation();
 
                 return true;
             }

@@ -33,10 +33,19 @@ namespace MR
         float subsurface = 0;
         std::shared_ptr<Texture> subsurface_tex = nullptr;
 
+        float clearcoat = 0;
+
+        float sheentint = 0;
+        float speculartint = 0;
+
         float ior = 1.0;
         float transmittion = 0;
 
         float absorbtion = 0;
+
+        vec3 emmision = vec3(0);
+
+        std::shared_ptr<Texture> normal_tex = nullptr;
     };
 
     class Material

@@ -10,7 +10,7 @@
 using namespace glm;
 namespace MR
 {
-    class ClassicalRaytrace : public Integrator
+    class TexcoordChecker : public Integrator
     {
     public:
         vec3 integrate(const MR::Ray &camera_ray, const MR::Scene &scene, std::shared_ptr<MR::Sampler> sampler) const override
@@ -26,7 +26,7 @@ namespace MR
             }
             auto &bsdf = info.bsdf;
             auto &material_info = info.mat_info;
-            LTE = vec3(info.texcoord, 0.0);
+            LTE = vec3(info.texcoord, 0.0f);
 
             return LTE;
         };
