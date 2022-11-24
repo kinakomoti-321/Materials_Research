@@ -4,6 +4,7 @@
 #include <Sampler/sampler.hpp>
 #include <Integrator/integrator.hpp>
 #include <Camera/camera.hpp>
+#include <omp.h>
 #include <memory>
 #include <Core/logger.hpp>
 
@@ -48,6 +49,7 @@ namespace MR
             std::cout << "sampler : " << _render_info.sampler->getSamplerName() << std::endl;
             std::cout << "filename : " << _render_info.filename << std::endl;
 
+#pragma omp parallel for schedule(dynamic, 1)
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)

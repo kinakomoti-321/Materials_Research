@@ -8,6 +8,7 @@
 #include <stb_image_write.h>
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
+#include <Image/tone_map.hpp>
 
 namespace MR
 {
@@ -132,12 +133,21 @@ namespace MR
                     float R = _pixel[idx];
                     float G = _pixel[idx + 1];
                     float B = _pixel[idx + 2];
+
+                    vec3 RGB(R, G, B);
+                    RGB = toneMappting_Uchimura(RGB);
+
                     if (check_gamma)
                     {
-                        R = std::pow(R, 1 / 2.2f);
-                        G = std::pow(G, 1 / 2.2f);
-                        B = std::pow(B, 1 / 2.2f);
+                        RGB.x = std::pow(RGB.x, 1 / 2.2f);
+                        RGB.y = std::pow(RGB.y, 1 / 2.2f);
+                        RGB.z = std::pow(RGB.z, 1 / 2.2f);
                     }
+
+                    R = std::min(RGB.x, 1.0f);
+                    G = std::min(RGB.y, 1.0f);
+                    B = std::min(RGB.z, 1.0f);
+
                     upixel[idx] = std::clamp(static_cast<unsigned char>(R * 255), (unsigned char)0, (unsigned char)255);
                     upixel[idx + 1] = std::clamp(static_cast<unsigned char>(G * 255), (unsigned char)0, (unsigned char)255);
                     upixel[idx + 2] = std::clamp(static_cast<unsigned char>(B * 255), (unsigned char)0, (unsigned char)255);

@@ -6,6 +6,8 @@
 #include <spdlog/spdlog.h>
 #include <Core/logger.hpp>
 #include <vector>
+#include <Scene/model.hpp>
+#include <Core/objloader.hpp>
 #include <Scene/sphere.hpp>
 #include <Material/material.hpp>
 #include <Core/objloader.hpp>
@@ -13,18 +15,6 @@
 
 namespace MR
 {
-    struct ModelInfo
-    {
-        std::vector<float> vertices;
-        std::vector<unsigned int> vert_indices;
-        std::vector<float> normals;
-        std::vector<float> texcoord;
-
-        std::vector<unsigned int> mat_indices;
-        std::vector<std::shared_ptr<Material>> materials;
-
-        std::vector<unsigned int> light_indices;
-    };
 
     float plane_vert[12] = {
         1, 1, 0,
@@ -84,25 +74,6 @@ namespace MR
             {
                 ib[i] = _modelinfo.vert_indices[i];
             }
-            /*
-             float *vb = (float *)rtcSetNewGeometryBuffer(geom,
-                                                          RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
-             vb[0] = 0.f;
-             vb[1] = 0.f;
-             vb[2] = 0.f; // 1st vertex
-             vb[3] = 1.f;
-             vb[4] = 0.f;
-             vb[5] = 0.f; // 2nd vertex
-             vb[6] = 0.f;
-             vb[7] = 1.f;
-             vb[8] = 0.f; // 3rd vertex
-
-             unsigned *ib = (unsigned *)rtcSetNewGeometryBuffer(geom,
-                                                                RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 3 * sizeof(unsigned), 1);
-             ib[0] = 0;
-             ib[1] = 1;
-             ib[2] = 2;
-             */
 
             rtcCommitGeometry(geom);
             std::cout << "Create Geometry success" << std::endl;
@@ -154,9 +125,19 @@ namespace MR
             auto mat = std::make_shared<Diffuse_Lambert>("testMaterial", mat_info);
             _modelinfo.materials.push_back(mat);
         }
+
         void addSphere(glm::vec3 origin, float radius)
         {
             _sphere.push_back(Sphere(origin, radius));
+        }
+
+        void oblLoad(const std::string &filepath, const std::string &filename)
+        {
+            if (!loadObj(filepath, filename, _modelinfo))
+            {
+                spdlog::error("[ObjLoader] file load failed " + filepath);
+                std::exit(EXIT_FAILURE);
+            }
         }
 
         void sceneBuild()
@@ -170,6 +151,7 @@ namespace MR
 
             rtcReleaseGeometry(geom);
             rtcCommitScene(scene);
+
             /*
             float *vb = (float *)rtcSetNewGeometryBuffer(geom,
                                                          RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, 3 * sizeof(float), 3);
@@ -213,9 +195,9 @@ namespace MR
             vec3 normal;
             unsigned int id = index * 3;
 
-            normal[0] = _modelinfo.vertices[id + 0];
-            normal[1] = _modelinfo.vertices[id + 1];
-            normal[2] = _modelinfo.vertices[id + 2];
+            normal[0] = _modelinfo.normals[id + 0];
+            normal[1] = _modelinfo.normals[id + 1];
+            normal[2] = _modelinfo.normals[id + 2];
 
             return normal;
         }

@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <cmath>
+#include <Core/constant.hpp>
 
 using namespace glm;
 namespace MR_Math
@@ -67,5 +68,19 @@ namespace MR_Math
         r = t_h + t_p;
 
         return true;
+    }
+
+    inline vec3 sphericalDirection(const float theta, const float phi)
+    {
+        return vec3(std::sin(theta) * std::cos(phi), std::cos(theta), std::sin(theta) * std::sin(phi));
+    }
+
+    inline vec3 hemisphereSampling(const float u, const float v, float &pdf)
+    {
+        const float theta = std::acos(std::max(1.0f - u, 0.0f));
+        const float phi = 2.0f * PI * v;
+        pdf = 1.0f / (2.0f * PI);
+
+        return sphericalDirection(theta, phi);
     }
 }
