@@ -54,6 +54,7 @@ namespace MR
         virtual std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const = 0;
         virtual MaterialInfo getMaterialInfomation() const = 0;
         virtual std::string getMaterialName() const = 0;
+        virtual vec3 getTex(const vec2 &uv, const unsigned int index) const = 0;
         virtual std::string getMaterialType() const = 0; // ex. Lambert,Phong
 
         virtual void writeTextures() const = 0;
@@ -86,6 +87,13 @@ namespace MR
         std::string getMaterialType() const override
         {
             return "Lambert";
+        };
+        vec3 getTex(const vec2 &uv, const unsigned int index) const override
+        {
+            if (_matinfo.basecolor_tex == nullptr)
+                return _matinfo.basecolor;
+            else
+                return _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
         };
         virtual void writeTextures() const override
         {

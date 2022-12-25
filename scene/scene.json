@@ -2,12 +2,12 @@
     "Image": {
         "width": 512,
         "height": 512,
-        "sample": 1000,
+        "sample": 100,
         "name": "scene_test.png"
     },
     "Scene": {
         "Filepath": "../model",
-        "Filename": "teapot.obj"
+        "Filename": "untitled.obj"
     },
     "IBL": {
         "HDRI_Use": true,
@@ -16,7 +16,7 @@
             1.0,
             1.0
         ],
-        "HDRI_path": "../model/test.hdr"
+        "HDRI_path": "../model/HDRI/test.hdr"
     },
     "Sampler": "RNG",
     "Integrator": "Pathtracer",

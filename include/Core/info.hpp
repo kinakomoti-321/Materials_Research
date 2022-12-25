@@ -19,5 +19,6 @@ namespace MR
 
         std::shared_ptr<MR_BSDF::BSDF> bsdf;
         MaterialInfo mat_info;
+        vec3 basecolor;
     };
 }

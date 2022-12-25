@@ -26,7 +26,7 @@ namespace MR
             }
             auto &bsdf = info.bsdf;
             auto &material_info = info.mat_info;
-            LTE = vec3(info.texcoord, 0.0f);
+            LTE = info.basecolor;
 
             return LTE;
         };

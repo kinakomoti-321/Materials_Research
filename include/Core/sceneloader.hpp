@@ -68,9 +68,11 @@ namespace MR
                 if (hdr_use)
                 {
                     std::string HDRI_path = jobj["IBL"]["HDRI_path"];
+                    _renderInfo.scene.buildHDRI(HDRI_path);
                 }
                 else
                 {
+                    _renderInfo.scene.buildHDRI(default_environt);
                 }
             }
 
@@ -95,6 +97,14 @@ namespace MR
                     _renderInfo.integrator = std::make_shared<Pathtracer>();
                 }
                 else if (inter_str == "basecolor_check")
+                {
+                    _renderInfo.integrator = std::make_shared<BaseColorChecker>();
+                }
+                else if (inter_str == "texcoord_check")
+                {
+                    _renderInfo.integrator = std::make_shared<TexcoordChecker>();
+                }
+                else
                 {
                     _renderInfo.integrator = std::make_shared<BaseColorChecker>();
                 }

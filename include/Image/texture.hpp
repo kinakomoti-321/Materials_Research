@@ -35,7 +35,7 @@ namespace MR
 
             if (i >= width || j >= height)
             {
-                spdlog::error("[Image] index out of bounds ({0},{1})" + _texname, i, j);
+                spdlog::error("[Texture] index out of bounds ({0},{1})" + _texname, i, j);
                 std::exit(EXIT_FAILURE);
             }
 

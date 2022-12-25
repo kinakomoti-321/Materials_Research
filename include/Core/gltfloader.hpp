@@ -5,6 +5,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <tinygltf/tiny_gltf.h>
 #include <glm/glm.hpp>
+#include <Core/renderer.hpp>
 
 #include <cstdio>
 #include <fstream>
@@ -1207,7 +1208,7 @@ struct v4dArray
     size_t size() const { return adapter.elemCount; }
 };
 
-bool gltfloader(std::string &filepath, std::string &filename, SceneData &scenedata)
+bool gltfloader(std::string &filepath, std::string &filename, &scenedata)
 {
 
     // Store original JSON string for `extras` and `extensions`
@@ -1471,7 +1472,6 @@ bool gltfloader(std::string &filepath, std::string &filename, SceneData &sceneda
         bool cameraCheck = false;
         for (auto &nodes : model.nodes)
         {
-            // Animation�̏����ݒ�
             {
                 auto &node_animation = animation[node_index];
                 node_animation.translation_data.key.push_back(0);

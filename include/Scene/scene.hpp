@@ -12,6 +12,7 @@
 #include <Material/material.hpp>
 #include <Core/objloader.hpp>
 #include <embree3/rtcore.h>
+#include <Image/texture.hpp>
 
 namespace MR
 {
@@ -49,6 +50,10 @@ namespace MR
         RTCDevice device;
         RTCScene scene;
         RTCGeometry geom;
+
+        // HDRI
+        std::shared_ptr<Texture> _hdri = nullptr;
+        vec3 _default_color = vec3(1);
 
         struct VertexIndex
         {
@@ -138,6 +143,16 @@ namespace MR
                 spdlog::error("[ObjLoader] file load failed " + filepath);
                 std::exit(EXIT_FAILURE);
             }
+        }
+
+        void buildHDRI(const std::string &filepath)
+        {
+            _hdri = std::make_shared<Texture>("HDRI", filepath);
+        }
+
+        void buildHDRI(const vec3 &defaultcolor)
+        {
+            _default_color = defaultcolor;
         }
 
         void sceneBuild()
@@ -277,8 +292,9 @@ namespace MR
                 auto mat_idx = _modelinfo.mat_indices[info.geometryID];
                 auto &mat = _modelinfo.materials[mat_idx];
 
-                info.bsdf = mat->getMaterial(bary);
+                info.bsdf = mat->getMaterial(info.texcoord);
                 info.mat_info = mat->getMaterialInfomation();
+                info.basecolor = mat->getTex(info.texcoord, 0);
 
                 return true;
             }
@@ -288,7 +304,18 @@ namespace MR
 
         vec3 getSkyLTE(const vec3 &direction) const
         {
-            return vec3(0);
+            if (_hdri == nullptr)
+                return _default_color;
+
+            float theta = std::acos(direction.y);
+            float phi = std::atan2(direction.z, direction.x);
+            phi = (phi < 0) ? (phi + PI2) : phi;
+
+            vec2 uv;
+            uv.x = std::clamp(phi * invPI2, 0.0f, 1.0f);
+            uv.y = std::clamp(theta * invPI, 0.0f, 1.0f);
+
+            return _hdri->getPixel(uv.x, uv.y);
         }
     };
 }
