@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -13,7 +15,11 @@
 #include <Integrator/normal_checker.hpp>
 #include <Integrator/texcoord_checker.hpp>
 #include <Integrator/pathtrace.hpp>
-#include <nlohmann/json.hpp>
+
+#include <Camera/camera.hpp>
+#include <Camera/pinhole.hpp>
+
+using json = nlohmann::json;
 
 namespace MR
 {
@@ -43,21 +49,34 @@ namespace MR
                 _renderInfo.width = jobj["Image"]["width"];
                 _renderInfo.height = jobj["Image"]["height"];
                 _renderInfo.sample = jobj["Image"]["sample"];
+                _renderInfo.name = jobj["Image"]["name"];
             }
 
             // SceneModel
             {
-
+                _renderInfo.filepath = jobj["Scene"]["Filepath"];
+                _renderInfo.filename = jobj["Scene"]["Filename"];
+                _renderInfo.scene.oblLoad(_renderInfo.filepath, _renderInfo.filename);
             }
 
             // IBL
             {
+                bool hdr_use = jobj["IBL"]["HDRI_Use"];
+                auto enviroment = jobj["IBL"]["default_enviroment"];
+                vec3 default_environt = vec3(enviroment[0], enviroment[1], enviroment[2]);
 
+                if (hdr_use)
+                {
+                    std::string HDRI_path = jobj["IBL"]["HDRI_path"];
+                }
+                else
+                {
+                }
             }
 
             // Sampler
             {
-                std::string sampler_str = jobj["Integrator"];
+                std::string sampler_str = jobj["Sampler"];
                 if (sampler_str == "RNG")
                 {
                     _renderInfo.sampler = std::make_shared<RNGrandom>();
@@ -71,7 +90,7 @@ namespace MR
             // Integrator
             {
                 std::string inter_str = jobj["Integrator"];
-                if (inter_str == "pathtracer")
+                if (inter_str == "Pathtracer")
                 {
                     _renderInfo.integrator = std::make_shared<Pathtracer>();
                 }
@@ -81,7 +100,19 @@ namespace MR
                 }
             }
 
-            //
+            // Camera
+            {
+                std::string camera_type = jobj["Camera"];
+                if (camera_type == "Pinhole")
+                {
+                }
+                else
+                {
+                }
+            }
+
+            // Scene Build
+            _renderInfo.scene.sceneBuild();
         }
         catch (std::exception &e)
         {

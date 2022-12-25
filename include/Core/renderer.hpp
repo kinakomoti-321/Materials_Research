@@ -12,6 +12,7 @@ namespace MR
 {
     struct RenderInformation
     {
+        std::string name;
         unsigned int width;
         unsigned int height;
         unsigned int sample;
@@ -21,6 +22,7 @@ namespace MR
         std::shared_ptr<Camera> camera;
         Scene scene;
 
+        std::string filepath;
         std::string filename;
     };
     class Renderer
@@ -41,6 +43,7 @@ namespace MR
             Image image(width, height);
 
             startLog("Rendering");
+            std::cout << "name : " << _render_info.name << std::endl;
             std::cout << "width : " << _render_info.width << std::endl;
             std::cout << "height : " << _render_info.height << std::endl;
             std::cout << "sample : " << _render_info.sample << std::endl;
@@ -73,7 +76,7 @@ namespace MR
             }
 
             endLog("Rendering");
-            image.writePNG(_render_info.filename);
+            image.writePNG(_render_info.name);
         }
     };
 }

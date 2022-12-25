@@ -1,0 +1,24 @@
+{
+    "Image": {
+        "width": 512,
+        "height": 512,
+        "sample": 1000,
+        "name": "scene_test.png"
+    },
+    "Scene": {
+        "Filepath": "../model",
+        "Filename": "teapot.obj"
+    },
+    "IBL": {
+        "HDRI_Use": true,
+        "default_enviroment": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "HDRI_path": "../model/test.hdr"
+    },
+    "Sampler": "RNG",
+    "Integrator": "Pathtracer",
+    "Camera": "Pinhole"
+}

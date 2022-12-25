@@ -15,7 +15,7 @@ namespace MR_BSDF
     private:
         vec3 _rho;
 
-        //コサイン重点的サンプリング
+        // コサイン重点的サンプリング
         vec3 cosineSampling(const float u, const float v, float &pdf) const
         {
             const float theta = 0.5f * std::acos(1.0f - 2.0f * u);

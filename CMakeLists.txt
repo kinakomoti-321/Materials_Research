@@ -3,7 +3,7 @@ project(main LANGUAGES C CXX)
 
 find_package(embree 3.0 REQUIRED)
 find_package(OpenMP)
-add_executable(MR "src/Pathtracer_test.cpp")
+add_executable(MR "src/scene_loader.cpp")
 
 add_subdirectory(external)
 
