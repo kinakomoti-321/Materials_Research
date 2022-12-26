@@ -127,7 +127,7 @@ namespace MR
             mat_info.metallic = 1;
             mat_info.sheen = 1;
 
-            auto mat = std::make_shared<Diffuse_Lambert>("testMaterial", mat_info);
+            auto mat = std::make_shared<Material>("testMaterial", mat_info);
             _modelinfo.materials.push_back(mat);
         }
 

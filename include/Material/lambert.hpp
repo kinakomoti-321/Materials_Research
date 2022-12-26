@@ -37,7 +37,7 @@ namespace MR_BSDF
         {
             return _rho * invPI;
         };
-        float psdBSDF(const vec3 &wo, const vec3 &wi) const override
+        float pdfBSDF(const vec3 &wo, const vec3 &wi) const override
         {
             return invPI * BSDFMath::cosTheta(wi);
         };

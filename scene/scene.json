@@ -7,7 +7,7 @@
     },
     "Scene": {
         "Filepath": "../model",
-        "Filename": "untitled.obj"
+        "Filename": "material.obj"
     },
     "IBL": {
         "HDRI_Use": true,

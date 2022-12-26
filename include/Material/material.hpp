@@ -6,6 +6,8 @@
 #include <string>
 #include <Image/texture.hpp>
 #include <Material/lambert.hpp>
+#include <Material/phong.hpp>
+#include <Material/blinn_phong.hpp>
 
 using namespace glm;
 
@@ -50,52 +52,43 @@ namespace MR
 
     class Material
     {
-    public:
-        virtual std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const = 0;
-        virtual MaterialInfo getMaterialInfomation() const = 0;
-        virtual std::string getMaterialName() const = 0;
-        virtual vec3 getTex(const vec2 &uv, const unsigned int index) const = 0;
-        virtual std::string getMaterialType() const = 0; // ex. Lambert,Phong
-
-        virtual void writeTextures() const = 0;
-    };
-
-    class Diffuse_Lambert : public Material
-    {
     private:
         MaterialInfo _matinfo;
         std::string _matname;
 
     public:
-        Diffuse_Lambert(const std::string &matname, MaterialInfo &info) : _matname(matname), _matinfo(info) {}
+        Material(const std::string &matname, MaterialInfo &info) : _matname(matname), _matinfo(info) {}
 
-        std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const override
+        std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const
         {
+            vec3 _basecolor;
             if (_matinfo.basecolor_tex == nullptr)
-                return std::make_shared<MR_BSDF::Lambert>(_matinfo.basecolor);
+                _basecolor = _matinfo.basecolor;
             else
-                return std::make_shared<MR_BSDF::Lambert>(_matinfo.basecolor_tex->getPixel(uv.x, uv.y));
+                _basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
+
+            return std::make_shared<MR_BSDF::BlinnPhong>(_basecolor, 500.0);
         };
-        MaterialInfo getMaterialInfomation() const override
+        MaterialInfo getMaterialInfomation() const
         {
             return _matinfo;
         };
-        std::string getMaterialName() const override
+        std::string getMaterialName() const
         {
             return _matname;
         };
-        std::string getMaterialType() const override
+        std::string getMaterialType() const
         {
             return "Lambert";
         };
-        vec3 getTex(const vec2 &uv, const unsigned int index) const override
+        vec3 getTex(const vec2 &uv, const unsigned int index) const
         {
             if (_matinfo.basecolor_tex == nullptr)
                 return _matinfo.basecolor;
             else
                 return _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
         };
-        virtual void writeTextures() const override
+        virtual void writeTextures() const
         {
             std::cout << "test" << std::endl;
         };
