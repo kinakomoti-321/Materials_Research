@@ -61,7 +61,7 @@ namespace MR
 
                 throughput *= e_bsdf * cosine / pdf;
 
-                ray = Ray(info.position + 0.001f * normal, wi);
+                ray = Ray(info.position, wi);
             }
 
             return LTE;

@@ -61,7 +61,7 @@ namespace MR_Math
         const vec3 t_h = -ior1 / ior2 * (v - dot(v, n) * n);
 
         // 全反射
-        if (norm(t_h) > 1.0)
+        if (norm2(t_h) > 1.0)
             return false;
 
         const vec3 t_p = -std::sqrt(std::max(1.0f - norm2(t_h), 0.0f)) * n;

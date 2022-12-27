@@ -30,4 +30,14 @@ namespace BSDFMath
 
     inline float cosPhi2(const vec3 &w) { return cosPhi(w) * cosPhi(w); }
     inline float sinPhi2(const vec3 &w) { return sinPhi(w) * sinPhi(w); }
+
+    inline float Shlick_Fresnel(const vec3 &wo, const vec3 &n, float ni, float no)
+    {
+        float F0 = std::pow((ni - no) / (ni + no), 2.0);
+        return F0 + (1.0f - F0) * std::pow(1.0f - dot(wo, n), 5.0);
+    };
+    inline vec3 Shlick_Fresnel(const vec3 &wo, const vec3 &n, const vec3 &F0)
+    {
+        return F0 + (vec3(1.0) - F0) * std::pow(1.0f - dot(wo, n), 5.0f);
+    };
 }

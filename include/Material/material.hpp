@@ -8,6 +8,8 @@
 #include <Material/lambert.hpp>
 #include <Material/phong.hpp>
 #include <Material/blinn_phong.hpp>
+#include <Material/ideal_reflection.hpp>
+#include <Material/ideal_refraction.hpp>
 
 using namespace glm;
 
@@ -67,7 +69,7 @@ namespace MR
             else
                 _basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
 
-            return std::make_shared<MR_BSDF::BlinnPhong>(_basecolor, 500.0);
+            return std::make_shared<MR_BSDF::IdealRefraction>(vec3(1.0), 1.0);
         };
         MaterialInfo getMaterialInfomation() const
         {
