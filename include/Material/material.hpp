@@ -11,6 +11,7 @@
 #include <Material/ideal_reflection.hpp>
 #include <Material/ideal_refraction.hpp>
 #include <Material/cook_torrance.hpp>
+#include <Material/ggx.hpp>
 
 using namespace glm;
 
@@ -70,7 +71,7 @@ namespace MR
             else
                 _basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
 
-            return std::make_shared<MR_BSDF::CookTorrance>(vec3(0.8), 0.5);
+            return std::make_shared<MR_BSDF::GGX>(vec3(0.8), 0.5);
         };
         MaterialInfo getMaterialInfomation() const
         {

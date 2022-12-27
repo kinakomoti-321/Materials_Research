@@ -2,8 +2,8 @@
     "Image": {
         "width": 512,
         "height": 512,
-        "sample": 1000,
-        "name": "scene_1.png"
+        "sample": 100,
+        "name": "GGX_test.png"
     },
     "Scene": {
         "Filepath": "../model",

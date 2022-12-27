@@ -76,7 +76,7 @@ namespace MR_BSDF
             float G = vcavity_G(wo, wi, wm);
             vec3 F = BSDFMath::Shlick_Fresnel(wo, wm, _F0);
 
-            float in = BSDFMath::cosTheta(wo);
+            float in = BSDFMath::cosTheta(wi);
             float on = BSDFMath::cosTheta(wo);
             // return F * G / (in * on);
             return F * G * D / (4.0f * in * on);
@@ -90,7 +90,7 @@ namespace MR_BSDF
             float G = vcavity_G(wo, wi, wm);
             vec3 F = BSDFMath::Shlick_Fresnel(wo, wm, _F0);
 
-            float in = BSDFMath::cosTheta(wo);
+            float in = BSDFMath::cosTheta(wi);
             float on = BSDFMath::cosTheta(wo);
 
             return F * G * D / (4.0f * in * on);
