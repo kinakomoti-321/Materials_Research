@@ -10,6 +10,7 @@
 #include <Material/blinn_phong.hpp>
 #include <Material/ideal_reflection.hpp>
 #include <Material/ideal_refraction.hpp>
+#include <Material/cook_torrance.hpp>
 
 using namespace glm;
 
@@ -69,7 +70,7 @@ namespace MR
             else
                 _basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
 
-            return std::make_shared<MR_BSDF::IdealRefraction>(vec3(1.0), 1.0);
+            return std::make_shared<MR_BSDF::CookTorrance>(vec3(0.8), 0.5);
         };
         MaterialInfo getMaterialInfomation() const
         {
@@ -95,40 +96,4 @@ namespace MR
             std::cout << "test" << std::endl;
         };
     };
-    /*
-        class Specular_Phong : public Material
-        {
-            std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const {
-
-            };
-            MaterialInfo getMaterialInfomation(const vec2 &uv) const {
-
-            };
-            std::string getMaterialName() const {
-
-            };
-            std::string getMaterialType() const {
-
-            }; // ex. Lambert,Phong
-        };
-
-        class Specular_Blinn_Phong : public Material
-        {
-        };
-        class Specular_Microfacet_Beckmann : public Material
-        {
-        };
-
-        class Specular_Microfacet_GGX : public Material
-        {
-        };
-
-        class DisneyBRDF : public Material
-        {
-        };
-
-        class DisneyBSDF : public Material
-        {
-        };
-    */
 }
