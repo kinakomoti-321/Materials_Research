@@ -83,4 +83,20 @@ namespace MR_Math
 
         return sphericalDirection(theta, phi);
     }
+
+    inline float lerp(const float a, const float b, const float t)
+    {
+        return a * (1.0 - t) + b * t;
+    }
+
+    inline vec3 lerp(const vec3 a, const vec3 b, const float t)
+    {
+        return a * (1.0f - t) + b * t;
+    }
+}
+
+inline std::ostream &operator<<(std::ostream &stream, const glm::vec3 &v)
+{
+    stream << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+    return stream;
 }

@@ -12,6 +12,7 @@
 #include <Material/ideal_refraction.hpp>
 #include <Material/cook_torrance.hpp>
 #include <Material/ggx.hpp>
+#include <Material/disney_brdf.hpp>
 
 using namespace glm;
 
@@ -65,13 +66,16 @@ namespace MR
 
         std::shared_ptr<MR_BSDF::BSDF> getMaterial(const vec2 &uv) const
         {
-            vec3 _basecolor;
+            MR_BSDF::Disney_Param param;
             if (_matinfo.basecolor_tex == nullptr)
-                _basecolor = _matinfo.basecolor;
+                param.basecolor = _matinfo.basecolor;
             else
-                _basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
+                param.basecolor = _matinfo.basecolor_tex->getPixel(uv.x, uv.y);
 
-            return std::make_shared<MR_BSDF::GGX>(vec3(0.8), 0.5);
+            param.roughness = 0.0;
+            param.metallic = 0.0;
+            param.basecolor = vec3(0.8);
+            return std::make_shared<MR_BSDF::DisneyBRDF>(param);
         };
         MaterialInfo getMaterialInfomation() const
         {
