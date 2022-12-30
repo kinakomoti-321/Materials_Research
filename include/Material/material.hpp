@@ -75,7 +75,7 @@ namespace MR
             param.roughness = 0.0;
             param.metallic = 0.0;
             param.basecolor = vec3(0.8);
-            return std::make_shared<MR_BSDF::DisneyBRDF>(param);
+            return std::make_shared<MR_BSDF::CookTorrance>(vec3(0.8), 0.5);
         };
         MaterialInfo getMaterialInfomation() const
         {

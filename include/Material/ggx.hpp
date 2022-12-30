@@ -104,7 +104,6 @@ namespace MR_BSDF
 
             float in = BSDFMath::cosTheta(wi);
             float on = BSDFMath::cosTheta(wo);
-            // return F * G / (in * on);
             vec3 bsdf = F * G * D / (4.0f * in * on);
             if (isnan(bsdf.x) || isinf(bsdf.x))
             {

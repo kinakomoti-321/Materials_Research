@@ -44,10 +44,10 @@ namespace MR_BSDF
 
         float vcavity_G(const vec3 &wo, const vec3 &wi, const vec3 &wm) const
         {
-            float wi_g = 2.0f * wi.y * wm.y / dot(wi, wm);
-            float wo_g = 2.0f * wo.y * wm.y / dot(wo, wm);
+            float wi_g = std::clamp(2.0f * wi.y * wm.y / dot(wi, wm), 0.0f, 1.0f);
+            float wo_g = std::clamp(2.0f * wo.y * wm.y / dot(wo, wm), 0.0f, 1.0f);
 
-            return std::min(1.0f, std::max(wi_g, wo_g));
+            return std::min(wi_g, wo_g);
         }
 
         vec3 sampling_m(const float u, const float v, float &pdf) const

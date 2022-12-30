@@ -53,8 +53,8 @@ namespace MR_BSDF
             // フレネルの計算
             float fresnel = BSDFMath::Shlick_Fresnel(wo, normal, ior1, ior2);
             vec3 bsdf;
-            // 反射か屈折の選択
 
+            // 反射か屈折の選択
             if (fresnel > sampler->getSample())
             {
                 pdf = fresnel;
