@@ -13,6 +13,7 @@
 #include <Material/cook_torrance.hpp>
 #include <Material/ggx.hpp>
 #include <Material/disney_brdf.hpp>
+#include <Material/iridenscent.hpp>
 
 using namespace glm;
 
@@ -75,7 +76,8 @@ namespace MR
             param.roughness = 0.0;
             param.metallic = 0.0;
             param.basecolor = vec3(0.8);
-            return std::make_shared<MR_BSDF::CookTorrance>(vec3(0.8), 0.5);
+            // return std::make_shared<MR_BSDF::CookTorrance>(vec3(0.8), 0.5);
+            return std::make_shared<MR_BSDF::IrienscentGGX>(0.01, 0.01);
         };
         MaterialInfo getMaterialInfomation() const
         {

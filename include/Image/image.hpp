@@ -135,7 +135,7 @@ namespace MR
                     float B = _pixel[idx + 2];
 
                     vec3 RGB(R, G, B);
-                    RGB = toneMappting_Uchimura(RGB);
+                    // RGB = toneMappting_Uchimura(RGB);
 
                     if (check_gamma)
                     {

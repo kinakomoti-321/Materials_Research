@@ -100,3 +100,13 @@ inline std::ostream &operator<<(std::ostream &stream, const glm::vec3 &v)
     stream << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
     return stream;
 }
+
+inline vec3 operator/(const glm::vec3 &a, const glm::vec3 &b)
+{
+    return vec3(a.x / b.x, a.y / b.y, a.z / b.z);
+}
+
+inline vec3 operator/(const float &k, const glm::vec3 &b)
+{
+    return vec3(k / b.x, k / b.y, k / b.z);
+}
